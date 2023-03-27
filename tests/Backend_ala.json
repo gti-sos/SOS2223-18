@@ -8,6 +8,19 @@
 	"item": [
 		{
 			"name": "/residential-variations-stats/loadInitialData",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -28,6 +41,19 @@
 		},
 		{
 			"name": "/residential-variations-stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -46,102 +72,20 @@
 			"response": []
 		},
 		{
-			"name": "/residential-variations-stats?Month=\"Enero\"",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URLBASE}}/api/v1/residential-variations-stats?Month=\"Enero\"",
-					"host": [
-						"{{URLBASE}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"residential-variations-stats"
-					],
-					"query": [
-						{
-							"key": "Month",
-							"value": "\"Enero\""
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/residential-variations-stats/Almeria",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria",
-					"host": [
-						"{{URLBASE}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"residential-variations-stats",
-						"Almeria"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/residential-variations-stats/Almeria/Enero",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria/Enero",
-					"host": [
-						"{{URLBASE}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"residential-variations-stats",
-						"Almeria",
-						"Enero"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/residential-variations-stats?from=Enero&to=Marzo",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URLBASE}}/api/v1/residential-variations-stats?from=Enero&to=Febrero",
-					"host": [
-						"{{URLBASE}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"residential-variations-stats"
-					],
-					"query": [
-						{
-							"key": "from",
-							"value": "Enero"
-						},
-						{
-							"key": "to",
-							"value": "Febrero"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/residential-variations-stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -169,7 +113,52 @@
 			"response": []
 		},
 		{
+			"name": "/residential-variations-stats (11 entradas)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/residential-variations-stats/Almeria (error 405)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function(){\r",
+							"    pm.response.to.have.status(405);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -198,64 +187,20 @@
 			"response": []
 		},
 		{
-			"name": "/residential-variations-stats/Almeria",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"Province\": \"Sevilla\",\r\n        \"Month\": \"Noviembre\",\r\n        \"immigrant\": 6454,\r\n        \"emigrant\": 5345,\r\n        \"total\": 3\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Sevilla",
-					"host": [
-						"{{URLBASE}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"residential-variations-stats",
-						"Sevilla"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/residential-variations-stats (error 405)",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"Province\": \"Almeria\",\r\n        \"Month\": \"Diciembre\",\r\n        \"immigrant\": 6454,\r\n        \"emigrant\": 5345,\r\n        \"total\": 3\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{URLBASE}}/api/v1/residential-variations-stats",
-					"host": [
-						"{{URLBASE}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"residential-variations-stats"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/residential-variations-stats/Sevilla",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -284,7 +229,358 @@
 			"response": []
 		},
 		{
+			"name": "/residential-variations-stats (201 craated)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"Province\": \"Almeria\",\r\n        \"Month\": \"Noviembre\",\r\n        \"immigrant\": 6454,\r\n        \"emigrant\": 5345,\r\n        \"total\": 4524\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats/Almeria",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats",
+						"Almeria"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats/Almeria",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"Province\": \"Alemria\",\r\n        \"Month\": \"Noviembre\",\r\n        \"immigrant\": 6454,\r\n        \"emigrant\": 5345,\r\n        \"total\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats",
+						"Almeria"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats/Almeria (updated)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats",
+						"Almeria"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats?Month=\"Enero\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats?Month=\"Enero\"",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats"
+					],
+					"query": [
+						{
+							"key": "Month",
+							"value": "\"Enero\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats/Almeria/Enero",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria/Enero",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats",
+						"Almeria",
+						"Enero"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats?from=Enero&to=Febrero",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats?from=Enero&to=Febrero",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "Enero"
+						},
+						{
+							"key": "to",
+							"value": "Febrero"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/residential-variations-stats (error 405)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function(){\r",
+							"    pm.response.to.have.status(405);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"Province\": \"Almeria\",\r\n        \"Month\": \"Diciembre\",\r\n        \"immigrant\": 6454,\r\n        \"emigrant\": 5345,\r\n        \"total\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/residential-variations-stats/Almeria/Marzo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URLBASE}}/api/v1/residential-variations-stats/Almeria/Abril",
+					"host": [
+						"{{URLBASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats",
+						"Almeria",
+						"Abril"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/residential-variations-stats (completo)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -297,6 +593,61 @@
 						"api",
 						"v1",
 						"residential-variations-stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://sos2223-18.ew.r.appspot.com/api/v1/residential-variations-stats?limit=2&&offset=4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"}),\r",
+							"pm.test(\"Contact number must be 2\", function() {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.a.lengthOf(2);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sos2223-18.ew.r.appspot.com/api/v1/residential-variations-stats?limit=2&&offset=4",
+					"protocol": "https",
+					"host": [
+						"sos2223-18",
+						"ew",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"residential-variations-stats"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "offset",
+							"value": "4"
+						}
 					]
 				}
 			},
