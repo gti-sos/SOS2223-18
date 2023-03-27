@@ -5,6 +5,9 @@ const router = Router();
 var Datastore = require("nedb");
 var db = new Datastore();
 //const _ = require("underscore");
+
+const pagina = "https://documenter.getpostman.com/view/26062660/2s93RQSDWT";
+
 const datos = [
     ["Almeria", "Hombres", 21, 2021, 13.2, 38.30],
     ["Almeria", "Hombres", 31, 2021, 40.1, 90.6],
@@ -654,5 +657,5 @@ router.delete(BASE_API_URL+"/proyection-populations/", (req, res) => {
 });
 
 router.get(BASE_API_URL+'/proyection-populations/docs', (req, res) => {
-  res.redirect('https://documenter.getpostman.com/view/26062660/2s93RQSDWT');
+  res.redirect(pagina);
 });
