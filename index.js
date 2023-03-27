@@ -19,10 +19,7 @@ app.use("/", express.static("./public"));
 
 
 //Ruta para caras ascii
-app.get("/cool", (request, response) => {
-    response.send(cool());
-    console.log("New request");  
-});
+
 
 //Rutas
 

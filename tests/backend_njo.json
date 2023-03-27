@@ -421,6 +421,49 @@
 			"response": []
 		},
 		{
+			"name": "Error 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"province\": \"Cordoba\",\r\n        \"gender\": \"Mujeres\",\r\n        \"age\": 20,\r\n        \"period\": 2019,\r\n        \"asset_thousand\": 150.7,\r\n        \"tax\": 51.8\r\n    ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_BASE}}/api/v1/proyection-populations/",
+					"host": [
+						"{{URL_BASE}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"proyection-populations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Put prohibido",
 			"event": [
 				{
