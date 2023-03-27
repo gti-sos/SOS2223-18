@@ -1,5 +1,4 @@
 var express = require("express");
-var cool = require("cool-ascii-faces");
 var app = express();
 var bodyParser = require("body-parser");
 
@@ -18,7 +17,6 @@ app.use("/", express.static("./public"));
 
 
 
-//Ruta para caras ascii
 
 
 //Rutas
