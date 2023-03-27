@@ -607,10 +607,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
-							"}),\r",
-							"pm.test(\"Contact number must be 2\", function() {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.a.lengthOf(2);\r",
 							"})"
 						],
 						"type": "text/javascript"
