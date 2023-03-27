@@ -438,7 +438,7 @@ app.get(BASE_API_URL+'/residential-variations-stats/docs', (req, res) => {
       console.log("GET con los datos");
   });
   
-  // Paginacion
+    // Paginacion
   function pagination(request, lista){
     var res = [];
     const limit = request.query.limit;
@@ -452,6 +452,7 @@ app.get(BASE_API_URL+'/residential-variations-stats/docs', (req, res) => {
     return res;
     }     
 };
+
 
 // GET datos, provincia y from y to
 app.get(BASE_API_URL+"/residential-variations-stats/:Province", (request, response) => {
@@ -631,6 +632,7 @@ app.put(BASE_API_URL + "/residential-variations-stats/:Province", (request, resp
       response.sendStatus(405);
   });
 
+  //Delete
   app.delete(BASE_API_URL+"/residential-variations-stats", (request, response) => {
       db.remove({}, {multi : true},(err, numRemoved)=>{
           if(err){
@@ -668,6 +670,28 @@ app.put(BASE_API_URL + "/residential-variations-stats/:Province", (request, resp
     });
     console.log("Se ha borrado la provincia en /residential-variations-stats/:Province");
 });
+
+// DELETE de provincia y mes
+app.delete(BASE_API_URL+"/residential-variations-stats/:Province/:Month", (request, response) => {
+    const Province = request.params.Province;
+    const Month = request.params.Month;
+    db.remove({Province : Province , Month : Month}, {}, (err, numRemoved)=>{
+        if(err){
+            console.log("Error para borrar todos los datos");
+            response.status(500).send("Error");
+
+        }else if(numRemoved == 0){
+            console.log("No se encuentran datos");
+            response.status(400).send("No se encuentran datos");
+        }else{
+            console.log("Borrado el dato");
+            response.status(200).send("Se ha borrado el dato");
+        }
+    });
+    console.log("Se ha borrado la provincia en /residential-variations-stats/:Province/:Month");
+});
+
+
 
 
 

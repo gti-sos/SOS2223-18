@@ -29,14 +29,8 @@ app.use("/", express.static("./public"));
     routeALA(app);
     routeARM(app);
 
-
+    
     app.listen(port, () => {
     console.log(`Server ready in  port ${port}`);
 
 });
-
-
-
-
-
-
