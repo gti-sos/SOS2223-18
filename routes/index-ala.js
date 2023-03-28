@@ -693,6 +693,4 @@ app.delete(BASE_API_URL+"/residential-variations-stats/:Province/:Month", (reque
 
 
 
-
-
 }
