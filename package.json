@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Modulo nodejs del grupo 18",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index",
     "test-residential-variations-stats": "npx newman run ./tests/Backend_ala.json -e ./tests/env/gcloud_ala.json",
@@ -25,6 +26,7 @@
     "express": "^4.18.2",
     "nedb": "^1.8.0",
     "newman": "^5.3.2",
+    "svelte": "^3.58.0",
     "underscore": "^1.13.6"
   }
 }
