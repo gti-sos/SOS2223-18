@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index",
     "test-residential-variations-stats": "npx newman run ./tests/Backend_ala.json -e ./tests/env/gcloud_ala.json",
-    "test-proyection-populations": "npx newman run ./tests/backend_njo.json -e ./tests/env/gcloud_njo.json",
+    "test-proyection-populations": "npx newman run ./tests/backend_njo.json -e ./tests/env/localhost_njo.json",
     "test": "npm run test-residential-variations-stats && npm run test-proyection-populations"
   },
   "repository": {
