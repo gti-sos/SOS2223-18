@@ -1,8 +1,9 @@
 import express from "express";
-//import cors from "cors";
+import cors from "cors";
 
 import { loadBackend_njo } from "./routes/index-njo.js";
 var app = express();
+app.use(cors());
 
 import { handler } from "./frontend/build/handler.js";
 

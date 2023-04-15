@@ -15,9 +15,9 @@ const pagina = "https://documenter.getpostman.com/view/26062660/2s93RQSDWT";
           
 var njoAPI = [
   {"province":"Almeria", "gender":"Hombres","age": 21,"period":2021,"asset_thousand": 13.2,"tax":38.30},
-                {"province":"Sevilla", "gender":"Hombres", "age":31,"period": 2021,"asset_thousand": 40.1, "tax":90.6},
-                {"province":"Almeria", "gender":"Hombres","age": 40, "period":2021, "asset_thousand":57.3,"tax": 92.9},
-                {"province":"Malaga", "gender":"Hombres", "age":50, "period":2021, "asset_thousand":54.3,"tax": 89.5},
+                {"province":"Sevilla", "gender":"Hombres", "age":31,"period": 2020,"asset_thousand": 40.1, "tax":90.6},
+                {"province":"Almeria", "gender":"Hombres","age": 40, "period":2018, "asset_thousand":57.3,"tax": 92.9},
+                {"province":"Malaga", "gender":"Hombres", "age":50, "period":2022, "asset_thousand":54.3,"tax": 89.5},
                 {"province":"Almeria",	"gender":"Hombres", "age":55, "period":2021, "asset_thousand":31.3, "tax":31.9},
                 {"province":"Cordoba",	"gender":"Hombres","age": 16, "period":2021, "asset_thousand":196.2,"tax": 65.6},
                 {"province":"Cordoba", "gender":"Mujeres","age": 16, "period":2021, "asset_thousand":150.7,"tax":	51.8},
@@ -26,7 +26,8 @@ var njoAPI = [
               {"province":"Almeria","gender":"Mujeres", "age":40, "period":2021,"asset_thousand": 41.5, "tax":75.6}
 ];
 
-
+db.insert(njoAPI);
+    console.log("Insertados los datos en ProyectionPopulations");
 
  
 //ruta api
