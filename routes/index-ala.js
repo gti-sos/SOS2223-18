@@ -1,11 +1,11 @@
-const { request, response } = require("express");
-var Datastore = require("nedb");
+//const { request, response } = require("express");
+import Datastore from "nedb";
 var db = new Datastore();
 
 const BASE_API_URL = "/api/v1";
 
     
-module.exports = (app) =>{
+function loadBackend_ala(app){
 
     var datos = [
           
@@ -694,3 +694,5 @@ app.delete(BASE_API_URL+"/residential-variations-stats/:Province/:Month", (reque
 
 
 }
+
+export { loadBackend_ala };
