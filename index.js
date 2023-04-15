@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import { loadBackend_njo } from "./routes/index-njo.js";
+import { loadBackend_ala } from "./routes/index-ala.js";
 var app = express();
 app.use(cors());
 
@@ -10,11 +11,11 @@ import { handler } from "./frontend/build/handler.js";
 var port = process.env.PORT || 3000;
 
 
-//var routeALA = require("./routes/index-ala");
+
 //var routeARM = require("./routes/index-arm");
 
 app.use(express.json())
-app.use("/", express.static("./public"));
+//app.use("/", express.static("./public"));
 
 
 
@@ -25,9 +26,8 @@ app.use("/", express.static("./public"));
 
     
 loadBackend_njo(app);
-
+loadBackend_ala(app);
     
-    //routeALA(app);
     //routeARM(app);
 app.use(handler);
     
