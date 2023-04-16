@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/proyection-populations/[province]/[period]/+page.svelte";
