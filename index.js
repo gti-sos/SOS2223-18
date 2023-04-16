@@ -1,18 +1,21 @@
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
+import express from "express";
+import cors from "cors";
 
-var Datastore = require('nedb');
-var db= new Datastore();
+import { loadBackend_njo } from "./routes/index-njo.js";
+import { loadBackend_ala } from "./routes/index-ala.js";
+var app = express();
+app.use(cors());
+
+import { handler } from "./frontend/build/handler.js";
 
 var port = process.env.PORT || 3000;
 
 
-var routeALA = require("./routes/index-ala");
-var routeARM = require("./routes/index-arm");
 
-app.use(bodyParser.json());
-app.use("/", express.static("./public"));
+//var routeARM = require("./routes/index-arm");
+
+app.use(express.json())
+//app.use("/", express.static("./public"));
 
 
 
@@ -21,12 +24,12 @@ app.use("/", express.static("./public"));
 
 //Rutas
 
-    app.use(require('./routes/index-NJO')) ;
     
+loadBackend_njo(app);
+loadBackend_ala(app);
     
-    routeALA(app);
-    routeARM(app);
-
+    //routeARM(app);
+app.use(handler);
     
     app.listen(port, () => {
     console.log(`Server ready in  port ${port}`);

@@ -1,76 +1,23 @@
-
-var express = require("express");
-const { Router, response } = require("express");
-const router = Router();
-var Datastore = require("nedb");
+import Datastore from "nedb";
 var db = new Datastore();
 //const _ = require("underscore");
 
 const pagina = "https://documenter.getpostman.com/view/26062660/2s93RQSDWT";
 
-const datos = [
-    ["Almeria", "Hombres", 21, 2021, 13.2, 38.30],
-    ["Almeria", "Hombres", 31, 2021, 40.1, 90.6],
-    ["Almeria", "Hombres", 40, 2021, 57.3, 92.9],
-    ["Almeria", "Hombres", 50, 2021, 54.3, 89.5],
-    ["Almeria",	"Hombres", 55, 2021, 31.3, 31.9],
-    ["Almeria",	"Hombres", 16, 2021, 196.2, 65.6],
-    ["Almeria", "Mujeres", 16, 2021, 150.7,	51.8],
-    ["Almeria",	"Mujeres", 20, 2021, 11.2, 34.1],
-    ["Almeria", "Mujeres", 30, 2021, 34.5, 81.5],
-    ["Almeria",	"Mujeres", 40, 2021, 41.5, 75.6]
-    ];
-    const valores = datos.filter(function(numero) {
-      return numero[0] === "Almeria";});
-      
-    function calcularMediaNJO(arrays, posicion) {
-    
-    
-        let valores = arrays.map(array => array[posicion]);
-          
-          
-          let suma = valores.reduce((age, valor) => age + valor, 0);
-          
-          
-          const media = suma / valores.length;
-          
-          return media;
-        }
-        router.get("/samples/njo", (request, response) => {
-          response.json(calcularMediaNJO(valores,4));
-          console.log("New request"); });
-          module.exports = router;
-          
-          var data = [];
-          function createData() {
-            for (let i = 0; i < 10; i++) {
-              data.push(
-                // Propiedades de los datos que deseamos agregar
-                {"province":"Almeria", "gender":"Hombres","age": 21,"period":2021,"asset_thousand": 13.2,"tax":38.30},
-                {"province":"Almeria", "gender":"Hombres", "age":31,"period": 2021,"asset_thousand": 40.1, "tax":90.6},
-                {"province":"Almeria", "gender":"Hombres","age": 40, "period":2021, "asset_thousand":57.3,"tax": 92.9},
-                {"province":"Almeria", "gender":"Hombres", "age":50, "period":2021, "asset_thousand":54.3,"tax": 89.5},
-                {"province":"Almeria",	"gender":"Hombres", "age":55, "period":2021, "asset_thousand":31.3, "tax":31.9},
-                {"province":"Almeria",	"gender":"Hombres","age": 16, "period":2021, "asset_thousand":196.2,"tax": 65.6},
-                {"province":"Almeria", "gender":"Mujeres","age": 16, "period":2021, "asset_thousand":150.7,"tax":	51.8},
-              {"province":"Almeria","gender":	"Mujeres", "age":20, "period":2021,"asset_thousand": 11.2, "tax":34.1},
-              {"province":"Almeria", "gender":"Mujeres", "age":30, "period":2021, "asset_thousand":34.5,"tax": 81.5},
-              {"province":"Almeria","gender":"Mujeres", "age":40, "period":2021,"asset_thousand": 41.5, "tax":75.6})
-            }
-          };
+
 
               
           const BASE_API_URL = "/api/v1"
               
         
-        
+          function loadBackend_njo(app){       
 
           
 var njoAPI = [
   {"province":"Almeria", "gender":"Hombres","age": 21,"period":2021,"asset_thousand": 13.2,"tax":38.30},
-                {"province":"Sevilla", "gender":"Hombres", "age":31,"period": 2021,"asset_thousand": 40.1, "tax":90.6},
-                {"province":"Almeria", "gender":"Hombres","age": 40, "period":2021, "asset_thousand":57.3,"tax": 92.9},
-                {"province":"Malaga", "gender":"Hombres", "age":50, "period":2021, "asset_thousand":54.3,"tax": 89.5},
+                {"province":"Sevilla", "gender":"Hombres", "age":31,"period": 2020,"asset_thousand": 40.1, "tax":90.6},
+                {"province":"Almeria", "gender":"Hombres","age": 40, "period":2018, "asset_thousand":57.3,"tax": 92.9},
+                {"province":"Malaga", "gender":"Hombres", "age":50, "period":2022, "asset_thousand":54.3,"tax": 89.5},
                 {"province":"Almeria",	"gender":"Hombres", "age":55, "period":2021, "asset_thousand":31.3, "tax":31.9},
                 {"province":"Cordoba",	"gender":"Hombres","age": 16, "period":2021, "asset_thousand":196.2,"tax": 65.6},
                 {"province":"Cordoba", "gender":"Mujeres","age": 16, "period":2021, "asset_thousand":150.7,"tax":	51.8},
@@ -78,12 +25,13 @@ var njoAPI = [
               {"province":"Almeria", "gender":"Mujeres", "age":30, "period":2021, "asset_thousand":34.5,"tax": 81.5},
               {"province":"Almeria","gender":"Mujeres", "age":40, "period":2021,"asset_thousand": 41.5, "tax":75.6}
 ];
-array_vacio = [];
 
+db.insert(njoAPI);
+    console.log("Insertados los datos en ProyectionPopulations");
 
  
 //ruta api
-router.get(BASE_API_URL+"/proyection-populations/loadInitialData", (request, response) => {
+app.get(BASE_API_URL+"/proyection-populations/loadInitialData", (request, response) => {
   console.log("New GET to /proyection-populations");
   db.find({}, (err, proyectionPopulations)=>{
   if(proyectionPopulations.length>0){
@@ -99,7 +47,7 @@ router.get(BASE_API_URL+"/proyection-populations/loadInitialData", (request, res
   }
   });
   });
-  router.get(BASE_API_URL+"/proyection-populations", (request, response) => {
+  app.get(BASE_API_URL+"/proyection-populations", (request, response) => {
     const from = request.query.from;
     const to = request.query.to;
     db.find({}, (err, proyectionPopulations)=>{
@@ -433,7 +381,7 @@ function pagination(request, lista){
   }     
 };
   
-router.get(BASE_API_URL+"/proyection-populations/:province", (request, response) => {
+app.get(BASE_API_URL+"/proyection-populations/:province", (request, response) => {
   const province = request.params.province;
   const from = request.query.from;
   const to = request.query.to;
@@ -469,7 +417,7 @@ router.get(BASE_API_URL+"/proyection-populations/:province", (request, response)
   });    
 });
 
-router.get(BASE_API_URL+"/proyection-populations/:province/:period", (request,response) => {
+app.get(BASE_API_URL+"/proyection-populations/:province/:period", (request,response) => {
   const province = request.params.province;
   const period = request.params.period;
   db.find({}, (err, list)=>{
@@ -496,7 +444,7 @@ router.get(BASE_API_URL+"/proyection-populations/:province/:period", (request,re
   console.log("Datos de /proyection-populations/:province/:period");
 });
 
-router.post(BASE_API_URL + "/proyection-populations", (request, response) => {
+app.post(BASE_API_URL + "/proyection-populations", (request, response) => {
   const province = request.body.province;
   const period = request.body.period;
   const tax = request.body.tax;
@@ -532,11 +480,11 @@ router.post(BASE_API_URL + "/proyection-populations", (request, response) => {
   });
   console.log("Nuevo POST en /proyection-populations"); 
 });
-  router.post(BASE_API_URL+"/proyection-populations/:province", (request, response) =>{
+  app.post(BASE_API_URL+"/proyection-populations/:province", (request, response) =>{
     console.log("No se puede hacer este POST /proyection-populations/:province");
     response.sendStatus(405);
   });
-  router.put(BASE_API_URL + "/proyection-populations/:province", (request, response) => {
+  app.put(BASE_API_URL + "/proyection-populations/:province", (request, response) => {
     const province = request.params.province;
     const body = request.body;
     if (province === body.province) {
@@ -570,7 +518,7 @@ router.post(BASE_API_URL + "/proyection-populations", (request, response) => {
         response.status(400).send("La provincia en la URL no coincide con la provincia en la solicitud");
     }
 });
-router.put(BASE_API_URL + "/proyection-populations/:province/:period", (request, response) => {
+app.put(BASE_API_URL + "/proyection-populations/:province/:period", (request, response) => {
   const provinceId = request.params.province;
   const periodId = parseInt(request.params.period);
   const body = request.body;
@@ -603,12 +551,12 @@ router.put(BASE_API_URL + "/proyection-populations/:province/:period", (request,
       response.status(400).send("El mes en la URL no coincide con el mes en la solicitud");
   }
 });
-router.put(BASE_API_URL+"/proyection-populations", (request,response) =>{
+app.put(BASE_API_URL+"/proyection-populations", (request,response) =>{
   console.log("No se puede hacer este PUT /proyection-populations");
   response.sendStatus(405);
 });
 
-router.delete(BASE_API_URL+"/proyection-populations/:province", (request, response) => {
+app.delete(BASE_API_URL+"/proyection-populations/:province", (request, response) => {
   const province = request.params.province;
   db.remove({province : province}, {}, (err, numRemoved)=>{
       if(err){
@@ -628,7 +576,7 @@ router.delete(BASE_API_URL+"/proyection-populations/:province", (request, respon
 });
 
 // DELETE de provincia y año
-router.delete(BASE_API_URL+"/proyection-populations/:province/:period", (request, response) => {
+app.delete(BASE_API_URL+"/proyection-populations/:province/:period", (request, response) => {
   const province = request.params.province;
   const period = request.params.period;
   db.remove({province : province , period : parseInt(period)}, {}, (err, numRemoved)=>{
@@ -646,7 +594,7 @@ router.delete(BASE_API_URL+"/proyection-populations/:province/:period", (request
   });
   console.log("Se ha borrado la provincia en /proyection-populations/:province");
 });
-router.delete(BASE_API_URL+"/proyection-populations/", (req, res) => {
+app.delete(BASE_API_URL+"/proyection-populations/", (req, res) => {
   db.remove({}, { multi: true }, (err, numRemoved) => {
     if (err) {
       res.status(500).send(err);
@@ -656,6 +604,9 @@ router.delete(BASE_API_URL+"/proyection-populations/", (req, res) => {
   });
 });
 
-router.get(BASE_API_URL+'/proyection-populations/docs', (req, res) => {
+app.get(BASE_API_URL+'/proyection-populations/docs', (req, res) => {
   res.redirect(pagina);
 });
+
+          }
+          export { loadBackend_njo };
