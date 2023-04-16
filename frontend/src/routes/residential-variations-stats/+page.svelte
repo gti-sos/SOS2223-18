@@ -23,6 +23,15 @@
         let result = "";
         let resultStatus = "";
         
+        let residentialVariations=[];
+        let Province = "";
+        let Month = "";
+        let immigrant_over = "";
+        let immigrant_under = "";
+        let emigrant_over = "";
+        let emigrant_under = "";
+        let total_over = "";
+        let total_under = "";
        // let añoInicio = "";
        // let añoFinal = "";
         let filtroProvincia = "";
@@ -90,7 +99,70 @@
             resultStatus = status;
         }*/
 
-        async function getVariationsFiltroProvincia(){
+        async function getVariationsFiltros() {
+        const consulta = {};
+        if (Province) {
+            consulta.Province = Province;
+        }
+        if (Month) {
+            consulta.Month = Month;
+        }
+        if (from) {
+            consulta.from = from;
+        }
+        if (to) {
+            consulta.to = to;
+        }
+        if (immigrant_over) {
+            consulta.immigrant_over = immigrant_over;
+        }
+        if (immigrant_under) {
+            consulta.immigrant_under = immigrant_under;
+        }
+        if (emigrant_over) {
+            consulta.emigrant_over = emigrant_over;
+        }
+        if (emigrant_under) {
+            consulta.emigrant_under = emigrant_under;
+        }
+        if (total_over) {
+            consulta.total_over = total_over;
+        }
+        if (total_under) {
+            consulta.total_under = total_under;
+        }
+
+        console.log(new URLSearchParams(consulta).toString());
+
+        const res = await fetch(
+            API + `?${new URLSearchParams(consulta).toString()}`,
+            {
+                method: "GET",
+            }
+        );
+        try {
+            const data = await res.json();
+            result = JSON.stringify(data, null, 2);
+            residentialVariations = data;
+        } catch (error) {
+            console.log(`Error parseando el resultado: ${error}`);
+        }
+        const status = await res.status;
+        resultStatus = status;
+        if (status == 200) {
+            mensajeUsuario = "Datos correspondientes al filtro";
+            setTimeout(() => {
+                mensajeUsuario = "";
+            }, 3000);
+        } else {
+            mensajeUsuario = "No se han podido encontrar los datos";
+            setTimeout(() => {
+                mensajeUsuario = "";
+            }, 3000);
+        }
+    }
+
+        /*async function getVariationsFiltroProvincia(){
             resultStatus = result = "";
             if(filtroProvincia == ""){
                 mensajeUsuario = "La provincia no puede estar vacia";
@@ -117,7 +189,7 @@
             }
             const status = await res.status;
             resultStatus = status;
-        }
+        }*/
         async function getPaginacion(){
             resultStatus = result = "";
             if(offsetFiltro == "" || limitFiltro == ""){
@@ -235,7 +307,7 @@
     <h2 style="color: red; text-align: center; font-family:Arial, Helvetica, sans-serif">{mensajeUsuario}</h2>
     {/if}
 
-    <div class = "filtros">
+    <!-- <div class = "filtros">
         <div class = "filtroProvincia">
             <input placeholder="Provincia" bind:value={filtroProvincia}>
             <Button color = "primary" on:click={getVariationsFiltroProvincia}>Filtra por Provincia</Button>
@@ -244,7 +316,64 @@
             <Button color="secondary" on:click={getLimpiarFiltros}>Limpiar Filtros</Button>
         </div>
     </div>
-    <strong style="margin: 10px;">Número de datos: {variations.length}</strong>
+    <strong style="margin: 10px;">Número de datos: {variations.length}</strong> -->
+    <div class="filtros">
+        <!--<div class="filtro">
+            <input placeholder="Año de inicio" bind:value={from} />
+            <input placeholder="Año Final" bind:value={to} />
+        </div> -->
+    
+        <div class="filtro">
+            <input placeholder="Provincia" bind:value={Province} />
+        </div>
+        
+        <div class = "filtro">
+            <input placeholder="Año" bind:value={Month} />
+        </div> 
+    </div>
+    
+    <div class = "filtros">
+        <div class = "filtro">
+            <input placeholder="Identificador mayor o igual" bind:value={immigrant_over} />
+        </div> 
+        <div class = "filtro">
+            <input placeholder="Identificador menor o igual" bind:value={immigrant_under} />
+        </div> 
+    </div>
+    
+    <div class = "filtros">
+        <div class = "filtro">
+            <input placeholder="Localidad mayor o igual" bind:value={emigrant_over} />
+        </div> 
+        <div class = "filtro">
+            <input placeholder="Localidad menor o igual" bind:value={emigrant_under} />
+        </div> 
+    </div>
+    
+    <div class = "filtros">
+        <div class = "filtro">
+            <input placeholder="Código postal mayor o igual" bind:value={total_over} />
+        </div> 
+        <div class = "filtro">
+            <input placeholder="Código postal menor o igual" bind:value={total_under} />
+        </div> 
+    </div>
+    
+    <div class = "botones">
+        <div class = "filtro">
+            <Button color = "primary" on:click={getVariationsFiltros}> Filtrar </Button>
+        </div>
+    
+        <div class="filtro">
+            <Button color="secondary" on:click={getLimpiarFiltros}>
+                Limpiar Filtros
+            </Button>
+        </div>
+    </div>
+        
+    
+    
+    <strong style="margin: 10px;">Número de datos: {residentialVariations.length}</strong>
 
     <Table striped>
         <thead>
@@ -319,13 +448,13 @@
         <Button color="success" on:click={loadData}>Cargar Datos</Button>
     </div>
 
-    <style>
+    <!--<style>
         .filtros{
             display: flex;
             justify-content: center;
         }
     
-       /* .filtroAño{
+        .filtroAño{
             margin: 30px;
             display: flex;
             gap: 15px;
@@ -335,11 +464,30 @@
             margin: 30px;
             display: flex;
             gap: 15px;
-        }*/
+        }
         
         .filtroProvincia{
             margin: 30px;
             display: flex;
             gap: 15px;
+        }
+    </style> -->
+
+    <style>
+        .filtros {
+            display: flex;
+            justify-content: center;
+        }
+    
+        .filtro {
+            margin: 30px;
+            display: flex;
+            gap: 15px;
+        }
+    
+        .botones {
+            display: flex;
+            justify-content: center;
+            margin: 15px;
         }
     </style>
