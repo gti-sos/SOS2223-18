@@ -23,7 +23,9 @@ var njoAPI = [
                 {"province":"Cordoba", "gender":"Mujeres","age": 16, "period":2021, "asset_thousand":150.7,"tax":	51.8},
               {"province":"Malaga","gender":	"Mujeres", "age":20, "period":2021,"asset_thousand": 11.2, "tax":34.1},
               {"province":"Almeria", "gender":"Mujeres", "age":30, "period":2021, "asset_thousand":34.5,"tax": 81.5},
-              {"province":"Almeria","gender":"Mujeres", "age":40, "period":2021,"asset_thousand": 41.5, "tax":75.6}
+              {"province":"Almeria","gender":"Mujeres", "age":40, "period":2021,"asset_thousand": 41.5, "tax":75.6},
+              {"province":"Sevilla","gender":"Mujeres", "age":25, "period":2019,"asset_thousand": 41.5, "tax":75.6},
+              {"province":"Jaen","gender":"Mujeres", "age":30, "period":2021,"asset_thousand": 41.5, "tax":75.6}
 ];
 
 db.insert(njoAPI);
@@ -48,323 +50,62 @@ app.get(BASE_API_URL+"/proyection-populations/loadInitialData", (request, respon
   });
   });
   app.get(BASE_API_URL+"/proyection-populations", (request, response) => {
-    const from = request.query.from;
-    const to = request.query.to;
-    db.find({}, (err, proyectionPopulations)=>{
-        if (from && to && !err) {
-            const provinciasAño = proyectionPopulations.filter(x => {return x.period >= from && x.period <= to}); 
-            if (from >= to) {
-                response.status(400).json("El rango de meses especificado es inválido");
-            
-            }else{
-                response.status(200);
-                response.json(provinciasAño.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-                console.log(`/GET en /proyection-populations?from=${from}&to=${to}`); 
-            }
-        }else if(!err){
-            const province = request.query.province;
-            const period = request.query.period;
-            const asset_thousand = request.query.asset_thousand;
-            const tax = request.query.tax;
-            const age = request.query.age;
-            const gender = request.query.gender;
-            const limit = request.query.limit;
-            const offset = request.query.offset;
-            
-            if(limit && offset){ 
-                const filtradas = pagination(request,proyectionPopulations);
-                console.log("Nuevo GET en /proyection-populations con paginación");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                delete c._id;
-                return c;
-                }));
-            }else if(province && period){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period);
-                console.log("Nuevo GET en /proyection-populations con provincia y mes");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && asset_thousand && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.asset_thousand >= asset_thousand
-                    && r.tax >= tax && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes, asset_thousande, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && asset_thousand && tax){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.asset_thousand >= asset_thousand
-                    && r.tax >= tax);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes, asset_thousande y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && asset_thousand && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.asset_thousand >= asset_thousand
-                  && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes, asset_thousande y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.tax >= tax
-                  && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && asset_thousand && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.asset_thousand >= asset_thousand && 
-                    r.tax >= tax && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, asset_thousande, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && asset_thousand){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.asset_thousand >= asset_thousand);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes y asset_thousande");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && tax){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.tax >= tax);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes y tax");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, mes y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && asset_thousand && tax){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.asset_thousand >= asset_thousand && 
-                    r.tax >= tax);
-                console.log("Nuevo GET en /proyection-populations con provincia, asset_thousande y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.tax >= tax && 
-                    r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && asset_thousand && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.asset_thousand >= asset_thousand &&
-                    r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con provincia, asset_thousande y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && asset_thousand && tax){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.asset_thousand >= asset_thousand &&
-                    r.tax >= tax);
-                console.log("Nuevo GET en /proyection-populations con mes, asset_thousande y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && asset_thousand && age){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.asset_thousand >= asset_thousand &&
-                    r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con mes, asset_thousande y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.tax >= tax &&
-                    r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con mes, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(asset_thousand && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.asset_thousand >= asset_thousand && r.tax >= tax
-                    && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con asset_thousande, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && period){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.period == period);
-                console.log("Nuevo GET en /proyection-populations con provincia y mes");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && asset_thousand && tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.asset_thousand >= asset_thousand && r.tax >= tax
-                    && r.age >= age);
-                console.log("Nuevo GET en /proyection-populations con mes, asset_thousande, taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && asset_thousand){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.asset_thousand == asset_thousand);
-                console.log("Nuevo GET en /proyection-populations con provincia y asset_thousande");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && tax){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.tax == tax);
-                console.log("Nuevo GET en /proyection-populations con provincia y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(province && age){
-                const filtradas = proyectionPopulations.filter(r => r.province == province && r.age == age);
-                console.log("Nuevo GET en /proyection-populations con provincia y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && asset_thousand){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.asset_thousand == asset_thousand);
-                console.log("Nuevo GET en /proyection-populations con mes y asset_thousande");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && tax){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.tax == tax);
-                console.log("Nuevo GET en /proyection-populations con mes y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(period && age){
-                const filtradas = proyectionPopulations.filter(r => r.period == period && r.age == age);
-                console.log("Nuevo GET en /proyection-populations con mes y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(asset_thousand && tax){
-                const filtradas = proyectionPopulations.filter(r => r.asset_thousand == asset_thousand && r.tax == tax);
-                console.log("Nuevo GET en /proyection-populations con asset_thousande y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(asset_thousand && age){
-                const filtradas = proyectionPopulations.filter(r => r.asset_thousand == asset_thousand && r.age == age);
-                console.log("Nuevo GET en /proyection-populations con asset_thousande y taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(tax && age){
-                const filtradas = proyectionPopulations.filter(r => r.tax == tax && r.age == age);
-                console.log("Nuevo GET en /proyection-populations con taxe y age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if (period) {
-                const filtradas = proyectionPopulations.filter(r => r.period === parseInt(period));
-                console.log("Nuevo GET en /proyection-populations con mes");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-                
-            } else if(province){
-                const filtradas = proyectionPopulations.filter(r => r.province === province);
-                console.log("Nuevo GET en /proyection-populations con provincia");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(asset_thousand){
-                const filtradas = proyectionPopulations.filter(r => r.asset_thousand == asset_thousand);
-                console.log("Nuevo GET en /proyection-populations con asset_thousande");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(tax){
-                const filtradas = proyectionPopulations.filter(r => r.tax == tax);
-                console.log("Nuevo GET en /proyection-populations con taxe");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else if(age){
-                const filtradas = proyectionPopulations.filter(r => r.age == age);
-                console.log("Nuevo GET en /proyection-populations con age");  
-                response.status(200);
-                response.json(filtradas.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }else {
-                console.log("Nuevo GET en /proyection-populations"); 
-                response.status(200);
-                response.json(proyectionPopulations.map((c)=>{
-                    delete c._id;
-                    return c;
-                }));
-            }  
-        }else{
-            console.log("Error al dar los datos");
+    db.find({}, {_id: 0}, (err, filteredList) => {
+        // Comprobamos los errores que han podido surgir
+        if(err){
+            console.log(`Error getting populations`);
+            // El estado es el 500 de Internal Server Error
             response.sendStatus(500);
-        }
-    });
+        // Comprobamos si existen datos:
+        }else{
+            // Tenemos que inicializar los valores necesarios para filtrar: tenemos que ver el limit y offset
+            let i = -1;
+            if(!request.query.offset){ 
+              var offset = -1;
+            }else{ 
+              var offset = parseInt(request.query.offset);
+            }
+            // Tenemos que filtrar los datos, para ver cada posible campo y devolver true si no se pasa en la query, 
+            // y si es un parámetro en la query se comprueba la condicion
+            let datitos = filteredList.filter((x) => {
+                return (((request.query.period == undefined)||(parseInt(request.query.period) === x.period))&&
+                ((request.query.gender == undefined)||(request.query.gender) === x.gender)&&
+                ((request.query.from == undefined)||(parseInt(request.query.from) <= x.period))&&
+                ((request.query.to == undefined)||(parseInt(request.query.to) >= x.period))&&
+                ((request.query.province == undefined)||(request.query.province === x.province))&&
+                ((request.query.asset_over == undefined)||(parseFloat(request.query.asset_over) <= x.asset_thousand))&&
+                ((request.query.asset_under == undefined)||(parseFloat(request.query.asset_under) >= x.asset_thousand))&&
+                ((request.query.tax_over == undefined)||(parseFloat(request.query.tax_over) <= x.tax))&&
+                ((request.query.tax_under == undefined)||(parseFloat(request.query.tax_under) >= x.tax))&&
+                ((request.query.age_over == undefined)||(parseFloat(request.query.age_over) <= x.age))&&
+                ((request.query.age_under == undefined)||(parseFloat(request.query.age_under) >= x.age)));
+            }).filter((x) => {
+                // La paginación
+                i = i+1;
+                if(request.query.limit==undefined){ 
+                  var cond = true;
+                }else{ 
+                  var cond = (parseInt(offset) + parseInt(request.query.limit)) >= i;
+                }
+                return (i>offset)&&cond;
+            });
+
+            // Comprobamos si tras el filtrado sigue habiendo datos, si no hay:
+        if(datitos.length == 0){
+            console.log(`populations not found`);
+              // Estado 404: Not Found
+              response.status(404).json(datitos);
+
+          // Si por el contrario encontramos datos
+        }else{
+            console.log(`Datos de populations devueltos: ${datitos.length}`);
+            // Devolvemos dichos datos, estado 200: OK
+            response.json(datitos);
+
+        }  
+    }
+})
+    
     console.log("GET con los datos");
 });
 function pagination(request, lista){

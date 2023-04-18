@@ -76,7 +76,7 @@
         }
     </script>
 
-    <h1 style="text-align: center; font-family:'Times New Roman', Times, serif; font-size: 60px;">Agroclimáticas Cambios</h1>
+    <h1 style="text-align: center; font-family:'Times New Roman', Times, serif; font-size: 60px;"> Cambios para datos poblacionales</h1>
       
     {#if mensajeUsuario !=""}
         <h2 style="color: red; text-align: center; font-family:Arial, Helvetica, sans-serif">{mensajeUsuario}</h2>
