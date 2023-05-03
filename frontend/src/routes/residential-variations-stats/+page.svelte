@@ -23,7 +23,7 @@
         let result = "";
         let resultStatus = "";
         
-        let residentialVariations=[];
+        //let residentialVariations=[];
         let Province = "";
         let Month = "";
         let immigrant_over = "";
@@ -32,9 +32,11 @@
         let emigrant_under = "";
         let total_over = "";
         let total_under = "";
-       // let añoInicio = "";
-       // let añoFinal = "";
-        let filtroProvincia = "";
+        let añoInicio = "";
+        let añoFinal = "";
+        let from = "";
+        let to = "";
+        //let filtroProvincia = "";
         let offsetFiltro = "";
         let limitFiltro = "";
 
@@ -67,7 +69,7 @@
             const status = await res.status;
             resultStatus = status;
         }
-        /* async function getPopulationsFiltroAño(){
+        /*async function getVariationsFiltroAño(){
             resultStatus = result = "";
             if(añoFinal < añoInicio){
                 mensajeUsuario = "El año final no puede ser menor que el año de inicio";
@@ -99,7 +101,7 @@
             resultStatus = status;
         }*/
 
-        async function getVariationsFiltros() {
+        async function getVariationsFiltrado() {
         const consulta = {};
         if (Province) {
             consulta.Province = Province;
@@ -107,12 +109,12 @@
         if (Month) {
             consulta.Month = Month;
         }
-        if (from) {
-            consulta.from = from;
-        }
-        if (to) {
-            consulta.to = to;
-        }
+        //if (from) {
+        //    consulta.from = from;
+        //}
+        //if (to) {
+        //    consulta.to = to;
+        //}
         if (immigrant_over) {
             consulta.immigrant_over = immigrant_over;
         }
@@ -143,7 +145,7 @@
         try {
             const data = await res.json();
             result = JSON.stringify(data, null, 2);
-            residentialVariations = data;
+            variations = data;
         } catch (error) {
             console.log(`Error parseando el resultado: ${error}`);
         }
@@ -160,7 +162,7 @@
                 mensajeUsuario = "";
             }, 3000);
         }
-    }
+    } 
 
         /*async function getVariationsFiltroProvincia(){
             resultStatus = result = "";
@@ -170,7 +172,7 @@
             }else if(!isNaN(filtroProvincia)){
                 mensajeUsuario = "La provincia no puede ser un número";
                 return;
-            }else if(populations.length == 0){
+            }else if(variations.length == 0){
                 mensajeUsuario = "No hay datos para mostrar";
                 return;
             }else if(filtroProvincia){
@@ -292,13 +294,22 @@
         }
         async function getLimpiarFiltros(){
         resultStatus = result = "";
-        if(filtroProvincia != ""){
-            filtroProvincia = "";
+        if(from != "" || to != "" || Province != "" || Month != "" || immigrant_under != "" || immigrant_over != "" 
+            || emigrant_under != "" || emigrant_over != "" || total_under != "" || total_over != ""){
+            from = "";
+            to = "";
+            Province = "";
+            Month = "";
+            immigrant_under = "";
+            immigrant_over = "";
+            emigrant_under = "";
+            emigrant_over = "";
+            total_under = "";
+            total_over = "";
         }
         getVariations();
-        mensajeUsuario = "";
         return;
-        }
+        } 
     </script>
 
     <h1 style="text-align: center; font-family:'Times New Roman', Times, serif; font-size: 60px;">Variaciones residenciales</h1>
@@ -307,7 +318,12 @@
     <h2 style="color: red; text-align: center; font-family:Arial, Helvetica, sans-serif">{mensajeUsuario}</h2>
     {/if}
 
-    <!-- <div class = "filtros">
+    <!--<div class = "filtros">
+        <div class = "filtroAño">
+            <input placeholder="Año de inicio" bind:value={añoInicio}>
+            <input placeholder="Año Final" bind:value={añoFinal}>
+            <Button color="primary" on:click={getVariationsFiltroAño}>Filtra por Año</Button>
+        </div>
         <div class = "filtroProvincia">
             <input placeholder="Provincia" bind:value={filtroProvincia}>
             <Button color = "primary" on:click={getVariationsFiltroProvincia}>Filtra por Provincia</Button>
@@ -317,11 +333,11 @@
         </div>
     </div>
     <strong style="margin: 10px;">Número de datos: {variations.length}</strong> -->
-    <div class="filtros">
-        <!--<div class="filtro">
+    <!--<div class="filtros">
+        <div class="filtro">
             <input placeholder="Año de inicio" bind:value={from} />
             <input placeholder="Año Final" bind:value={to} />
-        </div> -->
+        </div> 
     
         <div class="filtro">
             <input placeholder="Provincia" bind:value={Province} />
@@ -357,9 +373,9 @@
         <div class = "filtro">
             <input placeholder="Código postal menor o igual" bind:value={total_under} />
         </div> 
-    </div>
+    </div>-->
     
-    <div class = "botones">
+    <!--<div class = "botones">
         <div class = "filtro">
             <Button color = "primary" on:click={getVariationsFiltros}> Filtrar </Button>
         </div>
@@ -369,11 +385,70 @@
                 Limpiar Filtros
             </Button>
         </div>
+    </div>-->
+    
+    <div class="camposFiltros">
+        <!--<label class="columna">
+            Desde el año:
+            <input bind:value={from} type="text"/>
+        </label>
+        <label class="columna">
+            Hasta el año:
+            <input bind:value={to} type="text"/>
+        </label>-->
+        <label class="columna">
+            Provincia:
+            <input bind:value={Province} type="text"/>
+        </label>
+        <label class="columna">
+            Mes:
+            <input bind:value={Month} type="text"/>
+        </label>
     </div>
-        
+
+    <div class="camposFiltros">
+        <label class="columna">
+            Inmigrantes mayor o igual:
+            <input bind:value={immigrant_over} type="text"/>
+        </label>
+        <label class="columna">
+            Inmigrantes menor o igual:
+            <input bind:value={immigrant_under} type="text"/>
+        </label>
+    </div>
+    
+    <div class="camposFiltros">
+        <label class="columna">
+            Emigrantes mayores o iguales:
+            <input bind:value={emigrant_over} type="text"/>
+        </label>
+        <label class="columna">
+            Emigrantes menores o iguales:
+            <input bind:value={emigrant_under} type="text"/>
+        </label>
+    </div>
+    <div class="camposFiltros">
+        <label class="columna">
+            total mayores o iguales:
+            <input bind:value={total_over} type="text"/>
+        </label>
+        <label class="columna">
+            total menor o iguales:
+            <input bind:value={total_under} type="text"/>
+        </label>
+    </div>
+    <p></p>
+    <div style="text-align: center; word-spacing: 15px;">
+        <Button color = "primary" on:click={getVariationsFiltrado}>Filtrar</Button>
+
+        <Button color="secondary" on:click={getLimpiarFiltros}>Limpiar Filtros</Button>
+    </div>
+
+    <hr style="text-align: right; margin-left: 100px; margin-right: 100px;">
+
+    <strong style="margin-left: 10px;">Número de datos: {variations.length}</strong>
     
     
-    <strong style="margin: 10px;">Número de datos: {residentialVariations.length}</strong>
 
     <Table striped>
         <thead>
@@ -448,32 +523,24 @@
         <Button color="success" on:click={loadData}>Cargar Datos</Button>
     </div>
 
-    <!--<style>
-        .filtros{
+    <style>
+        label{
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 17px;
+            margin-left: 10px;
+        }
+        .camposFiltros{
             display: flex;
             justify-content: center;
         }
-    
-        .filtroAño{
-            margin: 30px;
-            display: flex;
-            gap: 15px;
-            }
-    
-        .limpiarFiltros{
-            margin: 30px;
-            display: flex;
-            gap: 15px;
+        .columna{
+            padding: 15px;
+            margin: 5px;
         }
-        
-        .filtroProvincia{
-            margin: 30px;
-            display: flex;
-            gap: 15px;
-        }
-    </style> -->
+    </style>
 
-    <style>
+    <!--<style>
         .filtros {
             display: flex;
             justify-content: center;
@@ -490,4 +557,4 @@
             justify-content: center;
             margin: 15px;
         }
-    </style>
+    </style>-->

@@ -3,5 +3,6 @@
 	"/about": [],
 	"/proyection-populations": [],
 	"/proyection-populations/[province]/[period]": [],
-	"/residential-variations-stats": []
+	"/residential-variations-stats": [],
+	"/residential-variations-stats/[Province]/[Month]": []
 }

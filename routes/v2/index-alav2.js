@@ -2,7 +2,7 @@
 import Datastore from "nedb";
 var db = new Datastore();
 
-const BASE_API_URL = "/api/v1";
+const BASE_API_URL = "/api/v2";
 
     
 function loadBackend_ala(app){
@@ -78,13 +78,6 @@ function loadBackend_ala(app){
         immigrant: 4329,
         emigrant: 3836,
         total: 8165
-      },
-      {
-        Province: "Sevilla",
-        Month: "Enero",
-        immigrant: 55,
-        emigrant: 55,
-        total: 110
       }            
                 
     ]
@@ -125,8 +118,8 @@ app.get(BASE_API_URL+'/residential-variations-stats/docs', (req, res) => {
     });
     
     // GET datos y tambien from y to
-    /*app.get(BASE_API_URL+"/residential-variations-stats", (request, response) => {
-      const from = request.query.from;
+    app.get(BASE_API_URL+"/residential-variations-stats", (request, response) => {
+      /*const from = request.query.from;
       const to = request.query.to;
       db.find({}, (err, residentialVariationsStats)=>{
           if (from && to && !err) {
@@ -442,65 +435,6 @@ app.get(BASE_API_URL+'/residential-variations-stats/docs', (req, res) => {
               response.sendStatus(500);
           }
       });*/
-
-      app.get(BASE_API_URL+"/residential-variations-stats", (request, response) => {
-        db.find({}, {_id: 0}, (err, filteredList) => {
-            // Comprobamos los errores que han podido surgir
-            if(err){
-                console.log(`Error getting variations`);
-                // El estado es el 500 de Internal Server Error
-                response.sendStatus(500);
-            // Comprobamos si existen datos:
-            }else{
-                // Tenemos que inicializar los valores necesarios para filtrar: tenemos que ver el limit y offset
-                let i = -1;
-                if(!request.query.offset){ 
-                  var offset = -1;
-                }else{ 
-                  var offset = parseInt(request.query.offset);
-                }
-                // Tenemos que filtrar los datos, para ver cada posible campo y devolver true si no se pasa en la query, 
-                // y si es un parámetro en la query se comprueba la condicion
-                let datitos = filteredList.filter((x) => {
-                    return (((request.query.Month == undefined)||(request.query.Month === x.Month))&&
-                    //((request.query.from == undefined)||(request.query.from) <= x.Month))&&
-                    //((request.query.to == undefined)||(request.query.to) >= x.Month))&&
-                    ((request.query.Province == undefined)||(request.query.Province === x.Province))&&
-                    ((request.query.immigrant_over == undefined)||(parseInt(request.query.immigrant_over) <= x.immigrant))&&
-                    ((request.query.immigrant_under == undefined)||(parseInt(request.query.immigrant_under) >= x.immigrant))&&
-                    ((request.query.emigrant_over == undefined)||(parseInt(request.query.emigrant_over) <= x.emigrant))&&
-                    ((request.query.emigrant_under == undefined)||(parseInt(request.query.emigrant_under) >= x.emigrant))&&
-                    ((request.query.total_over == undefined)||(parseInt(request.query.total_over) <= x.total))&&
-                    ((request.query.total_under == undefined)||(parseInt(request.query.total_under) >= x.total)));
-                }).filter((x) => {
-                    // La paginación
-                    i = i+1;
-                    if(request.query.limit==undefined){ 
-                      var cond = true;
-                    }else{ 
-                      var cond = (parseInt(offset) + parseInt(request.query.limit)) >= i;
-                    }
-                    return (i>offset)&&cond;
-                });
-    
-                // Comprobamos si tras el filtrado sigue habiendo datos, si no hay:
-            if(datitos.length == 0){
-                console.log(`variations not found`);
-                  // Estado 404: Not Found
-                  response.status(404).json(datitos);
-    
-              // Si por el contrario encontramos datos
-            }else{
-                console.log(`Datos de variations devueltos: ${datitos.length}`);
-                // Devolvemos dichos datos, estado 200: OK
-                response.json(datitos);
-    
-            }  
-        }
-    })
-        
-        
-
       console.log("GET con los datos");
   });
   
