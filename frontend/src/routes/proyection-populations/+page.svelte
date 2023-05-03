@@ -1,9 +1,10 @@
 <script>
     // @ts-nocheck
-        import { onMount } from "svelte";
+   import { onMount } from "svelte";
         import { dev } from "$app/environment";
         import { Button, Table } from 'sveltestrap';
         import { Pagination, PaginationItem, PaginationLink } from 'sveltestrap';
+    
         onMount(async () =>{
             getPopulations();
         });
@@ -22,11 +23,18 @@
         let newPopulationsTax= "";
         let result = "";
         let resultStatus = "";
-        let añoInicio = "";
-        let añoFinal = "";
-        let filtroProvincia = "";
-        let offsetFiltro = "";
-        let limitFiltro = "";
+        let from = "";
+        let to = "";
+        let period = "";
+        let province = "";
+        let gender = "";
+        let age_under = "";
+        let age_over = "";
+        let asset_under = "";
+        let asset_over = "";
+        let tax_under = "";
+        let tax_over = "";
+    
         async function loadData(){
             resultStatus = result = "";
             const res = await fetch(API+'/loadInitialData', {
@@ -43,7 +51,7 @@
         }
         async function getPopulations(){
             resultStatus = result = "";
-            const res = await fetch(API, {
+            const res = await fetch(API+"?offset=0&limit=10", {
                 method: "GET"
             });
             try{
@@ -56,27 +64,46 @@
             const status = await res.status;
             resultStatus = status;
         }
-        async function getPopulationsFiltroAño(){
-            resultStatus = result = "";
-            if(añoFinal < añoInicio){
-                mensajeUsuario = "El año final no puede ser menor que el año de inicio";
-                return;
-            }else if(isNaN(añoInicio) || isNaN(añoFinal)){
-                mensajeUsuario = "El año de inicio y el año final no pueden ser letras";
-                return;
-            }else if(añoInicio == "" || añoFinal == ""){
-                mensajeUsuario = "El año de inicio y el año final no pueden estar vacios";
-                return;
-            }else if(populations.length == 0){
-                mensajeUsuario = "No hay datos para mostrar";
-                return;
-            }else if(añoInicio <= añoFinal){
-                mensajeUsuario = "Se muestran los datos correspondientes al filtro";
+        async function getPopulationsFiltrado(){
+            const consulta = {}; // crea un objeto vacío para los otros campo
+            if (province) { 
+                consulta.province = province; 
             }
-            const res = await fetch(API+"?from="+añoInicio+"&to="+añoFinal, {
+            if (period) { 
+                consulta.period = period; 
+            }
+            if (from) { 
+                consulta.from = from; 
+            }
+            if (to) { 
+                consulta.to = to; 
+            }
+            if (gender) { 
+                consulta.gender = gender; 
+            }
+            if (age_under) { 
+                consulta.age_under = age_under; 
+            }
+            if (age_over) { 
+                consulta.age_over = age_over; 
+            }
+            if (tax_under) { 
+                consulta.tax_under = tax_under; 
+            }
+            if (tax_over) { 
+                consulta.tax_over = tax_over; 
+            }
+            if (asset_under) { 
+                consulta.asset_under = asset_under; 
+            }
+            if (asset_over) { 
+                consulta.asset_over = asset_over; 
+            }
+            console.log(new URLSearchParams(consulta).toString());
+            const res = await fetch(API+`?${new URLSearchParams(consulta).toString()}`, {
                 method: "GET"
             });
-            console.log(API+"?from="+añoInicio+"&to="+añoFinal);
+            
             try{
                 const data = await res.json();
                 result = JSON.stringify(data, null, 2);
@@ -86,49 +113,16 @@
             }
             const status = await res.status;
             resultStatus = status;
-        }
-        async function getPopulationsFiltroProvincia(){
-            resultStatus = result = "";
-            if(filtroProvincia == ""){
-                mensajeUsuario = "La provincia no puede estar vacia";
-                return;
-            }else if(!isNaN(filtroProvincia)){
-                mensajeUsuario = "La provincia no puede ser un número";
-                return;
-            }else if(populations.length == 0){
-                mensajeUsuario = "No hay datos para mostrar";
-                return;
-            }else if(filtroProvincia){
-                mensajeUsuario = "Se muestran los datos correspondientes al filtro";
-            }
-            const res = await fetch(API+"?province="+filtroProvincia, {
-                method: "GET"
-            });
-            console.log(API+"?province="+filtroProvincia);
-            try{
-                const data = await res.json();
-                result = JSON.stringify(data, null, 2);
-                populations = data;
-            }catch(error){
-                console.log(`Error parseando el resultado: ${error}`);
-            }
-            const status = await res.status;
-            resultStatus = status;
-        }
-        async function getPaginacion(){
-            resultStatus = result = "";
-            if(offsetFiltro == "" || limitFiltro == ""){
-                mensajePaginacion = "Los parámetros no pueden estar vacios";
-                return;
-            }else if(isNaN(offsetFiltro) || isNaN(limitFiltro)){
-                mensajePaginacion = "Los parámetros no pueden ser letras";
-                return;
-            }else if(limitFiltro <= 0){
-                mensajePaginacion = "El límite debe ser superior a 0";
-                return;
+            if(status==200){
+                mensajeUsuario = "Datos correspondientes al filtro";
+                setTimeout(() => {mensajeUsuario = '';}, 3000);
             }else{
-                mensajePaginacion = "Se muestran los datos correspondientes al filtro";
+                mensajeUsuario = "No se han podido encontrar los datos";
+                setTimeout(() => {mensajeUsuario = '';}, 3000);
             }
+        }
+        async function getPaginacion(offsetFiltro, limitFiltro){
+            resultStatus = result = "";
             const res = await fetch(API+"?offset="+offsetFiltro+"&limit="+limitFiltro, {
                 method: "GET"
             });
@@ -218,39 +212,100 @@
         }
         async function getLimpiarFiltros(){
         resultStatus = result = "";
-        if(filtroProvincia != "" || añoInicio != "" || añoFinal != ""){
-            filtroProvincia = "";
-            añoInicio = "";
-            añoFinal = "";
+        if(from != "" || to != "" || province != "" || period != "" || age_under != "" || age_over != "" 
+            || tax_under != "" || tax_over != "" || asset_under != "" || asset_over != ""|| gender != ""){
+            from = "";
+            to = "";
+            province = "";
+            period = "";
+            age_under = "";
+            age_over = "";
+            tax_under = "";
+            tax_over = "";
+            asset_under = "";
+            asset_over = "";
+            gender = "";
         }
         getPopulations();
-        mensajeUsuario = "";
         return;
-        }
-    </script>
+        } 
+</script>
 
-    <h1 style="text-align: center; font-family:'Times New Roman', Times, serif; font-size: 60px;">Datos por población</h1>
+   
+
+    
+    
+
+    <h1 style="text-align: center; font-family:'Times New Roman', Times, serif; font-size: 60px;">Datos poblacionales</h1>
     <p></p>
     {#if mensajeUsuario !=""}
     <h2 style="color: red; text-align: center; font-family:Arial, Helvetica, sans-serif">{mensajeUsuario}</h2>
     {/if}
 
-    <div class = "filtros">
-        <div class = "filtroAño">
-            <input placeholder="Año de inicio" bind:value={añoInicio}>
-            <input placeholder="Año Final" bind:value={añoFinal}>
-            <Button color="primary" on:click={getPopulationsFiltroAño}>Filtra por Año</Button>
-        </div>
-        <div class = "filtroProvincia">
-            <input placeholder="Provincia" bind:value={filtroProvincia}>
-            <Button color = "primary" on:click={getPopulationsFiltroProvincia}>Filtra por Provincia</Button>
-        </div>
-        <div class ="limpiarFiltros">
-            <Button color="secondary" on:click={getLimpiarFiltros}>Limpiar Filtros</Button>
-        </div>
+    <div class="camposFiltros">
+        <label class="columna">
+            Desde el año:
+            <input bind:value={from} type="text"/>
+        </label>
+        <label class="columna">
+            Hasta el año:
+            <input bind:value={to} type="text"/>
+        </label>
+        <label class="columna">
+            Provincia:
+            <input bind:value={province} type="text"/>
+        </label>
+        <label class="columna">
+            Año:
+            <input bind:value={period} type="text"/>
+        </label>
+        <label class="columna">
+            Género:
+            <input bind:value={gender} type="text"/>
+        </label>
     </div>
-    <strong style="margin: 10px;">Número de datos: {populations.length}</strong>
 
+    <div class="camposFiltros">
+        <label class="columna">
+            Edad mayor o igual:
+            <input bind:value={age_over} type="text"/>
+        </label>
+        <label class="columna">
+            Edad menor o igual:
+            <input bind:value={age_under} type="text"/>
+        </label>
+    </div>
+    
+    <div class="camposFiltros">
+        <label class="columna">
+            Impuestos mayores o iguales:
+            <input bind:value={asset_over} type="text"/>
+        </label>
+        <label class="columna">
+            Impuestos menores o iguales:
+            <input bind:value={asset_under} type="text"/>
+        </label>
+    </div>
+    <div class="camposFiltros">
+        <label class="columna">
+            Tasas mayores o iguales:
+            <input bind:value={tax_over} type="text"/>
+        </label>
+        <label class="columna">
+            Tasas menor o iguales:
+            <input bind:value={tax_under} type="text"/>
+        </label>
+    </div>
+    <p></p>
+    <div style="text-align: center; word-spacing: 15px;">
+        <Button color = "primary" on:click={getPopulationsFiltrado}>Filtrar</Button>
+
+        <Button color="secondary" on:click={getLimpiarFiltros}>Limpiar Filtros</Button>
+    </div>
+
+    <hr style="text-align: right; margin-left: 100px; margin-right: 100px;">
+
+    <strong style="margin-left: 10px;">Número de datos: {populations.length}</strong>
     <Table striped>
         <thead>
           <tr>
@@ -287,67 +342,41 @@
         </tbody>
     </Table>
     
-    <!--<Pagination style="text-align: center; display: flex; justify-content: center; flex-direction: row; gap: 15px;" ariaLabel="Page navigation example">
-        <PaginationItem disabled>
-          <PaginationLink previous href="#" />
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href={getPaginacion}>1</PaginationLink>
+    <Pagination style="text-align: center; display: flex; justify-content: center; flex-direction: row; gap: 15px;" ariaLabel="Page navigation example">
+        <PaginationItem>
+            <PaginationLink on:click={() => getPaginacion(-1,10)} first/>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
+            <PaginationLink on:click={() => getPaginacion(-1,10)}>1</PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
+            <PaginationLink on:click={() => getPaginacion(10,20)}>2</PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
+            <PaginationLink on:click={() => getPaginacion(20,30)}>3</PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
+            <PaginationLink on:click={() => getPaginacion(20,30)} last/>
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink next href="#" />
-        </PaginationItem>
-    </Pagination>-->
-    <hr style="text-align: right; margin-left: 100px; margin-right: 100px;">
-
-    {#if mensajePaginacion !=""}
-    <h2 style="color: red; text-align: center; font-family:Arial, Helvetica, sans-serif">{mensajePaginacion}</h2>
-    {/if}
-    <p></p>
-    <div style="text-align: center; display: flex; justify-content: center; flex-direction: row; gap: 15px;">
-        <td><input placeholder="A partir de: " bind:value={offsetFiltro}></td>
-        <td><input placeholder="Límite" bind:value={limitFiltro}></td>
-        <td><Button style="center" color="primary" on:click={getPaginacion}>Paginación</Button></td>
-    </div>
-    <p></p>
+    </Pagination>
     <div style="text-align: center; word-spacing: 20px;">
         <Button color="danger" on:click={deletePopulationsAll}>Borrar Datos</Button>
         <Button color="success" on:click={loadData}>Cargar Datos</Button>
     </div>
 
     <style>
-        .filtros{
+        label{
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 17px;
+            margin-left: 10px;
+        }
+        .camposFiltros{
             display: flex;
             justify-content: center;
         }
-    
-        .filtroAño{
-            margin: 30px;
-            display: flex;
-            gap: 15px;
-            }
-    
-        .limpiarFiltros{
-            margin: 30px;
-            display: flex;
-            gap: 15px;
-        }
-        
-        .filtroProvincia{
-            margin: 30px;
-            display: flex;
-            gap: 15px;
+        .columna{
+            padding: 15px;
+            margin: 5px;
         }
     </style>
